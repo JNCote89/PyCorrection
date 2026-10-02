@@ -37,7 +37,7 @@ jobs:
         with:
           pixi-version: v0.40.0
           environments: build
-          cache: true
+          cache: false
 
       - name: Install Linux build dependencies (X11 / OpenGL for PySide6)
         run: |
@@ -76,7 +76,7 @@ jobs:
         with:
           pixi-version: v0.40.0
           environments: build
-          cache: true
+          cache: false
 
       - name: Compile Executable via Pixi
         run: pixi run -e build compile
@@ -95,7 +95,7 @@ jobs:
           retention-days: 7
 
   # ---------------------------------------------------------------------------
-  # 3. Release Job (Runs ONLY when a tag like 'v0.1.0' is pushed)
+  # 3. Release Job (Runs ONLY when a tag like 'v0.1' is pushed)
   # ---------------------------------------------------------------------------
   release:
     name: Create GitHub Release
