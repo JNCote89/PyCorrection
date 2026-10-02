@@ -35,8 +35,9 @@ jobs:
       - name: Set up Pixi environment
         uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: v0.40.0
-          run-install: false
+          pixi-version: v0.58.0
+          run-install: true
+          environments: build
 
       - name: Install Linux build dependencies (X11 / OpenGL for PySide6)
         run: |
@@ -73,8 +74,9 @@ jobs:
       - name: Set up Pixi environment
         uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: v0.40.0
-          run-install: false
+          pixi-version: v0.58.0
+          run-install: true
+          environments: build
 
       - name: Compile Executable via Pixi
         run: pixi run -e build compile
