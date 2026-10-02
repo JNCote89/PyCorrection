@@ -1,0 +1,44 @@
+Code snippet
+
+# Auto-detect text files and normalize line endings to LF on commit
+* text=auto eol=lf
+
+# ------------------------------------------------------------------------------
+# Source Code & Configs (Enforce LF line endings)
+# ------------------------------------------------------------------------------
+*.py text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+
+# Windows Batch scripts (Must retain CRLF to execute properly)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# ------------------------------------------------------------------------------
+# Binary Files (Prevent Git from attempting text diffs or changing line endings)
+# ------------------------------------------------------------------------------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.svg text
+*.pyd binary
+*.so binary
+*.dylib binary
+*.db binary
+*.sqlite3 binary
+
+# ------------------------------------------------------------------------------
+# PyCharm & IDE Settings
+# ------------------------------------------------------------------------------
+.idea/** text eol=lf
+
+# SCM syntax highlighting & preventing 3-way merges
+pixi.lock merge=binary linguist-language=YAML linguist-generated=true -diff

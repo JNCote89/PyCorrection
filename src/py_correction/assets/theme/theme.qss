@@ -1,0 +1,168 @@
+/*
+QT process the alpha channel first in hex color -> #AARRGGBB
+QSS use C++ bool -> [dragging="true"]
+*/
+
+/* ==========================================================================
+   GLOBAL & BASE STYLES
+   (Colors are handle by QDarkTheme)
+   ========================================================================== */
+
+/* Inter font inside the py_correction / assets / fonts directory */
+
+QWidget {
+    font-family: "Inter", sans-serif;
+    font-size: 12pt;
+}
+
+/* ==========================================================================
+   GLOBAL WIDGETS
+   ========================================================================== */
+
+QGroupBox {
+    font-size: 16pt;
+    font-weight: bold;
+    border: 3px solid #8f8f8f;
+    border-radius: 9px;
+    margin-top: 2ex;
+    padding-top: 12px;
+}
+
+QScrollArea {
+    border: None;
+}
+
+QGroupBox[class="inner_groupbox"]{
+    font-size: 14pt;
+    font-weight: bold;
+    border: 2px solid #8f8f8f;
+    border-radius: 6px;
+    margin-top: 2ex;
+    padding: 24px 18px 24px 18px;
+}
+
+QWidget[class="collapsible_section_group_box"] {
+    border: 1px dashed #8f8f8f;
+    border-radius: 3px;
+    margin: 2ex;
+}
+
+QWidget[class="instruction_collapsible_section"] {
+    border: None;
+    margin: 2ex;
+}
+
+QGroupBox::title {
+    font-size: 16pt;
+    font-weight: bold;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 5px;
+}
+
+QCheckBox[class="check_box_glitch_fix"] {
+    border: none;
+    outline: none;
+}
+
+QPushButton, QComboBox, QLineEdit {
+    min-height: 25px;
+    height: 30px;
+    padding: 4px 6px;
+}
+
+QPushButton[class="delete_button"] {
+    background-color: #33FF5252;
+    border: 1px solid #55FF5252;
+    border-radius: 4px;
+    padding: 5px 12px;
+}
+
+QPushButton[class="delete_button"]:hover {
+    background-color: #66FF5252;
+    border: 1px solid #88FF5252;
+}
+
+QPushButton[class="delete_button"]:pressed {
+    background-color: #99FF5252;
+}
+
+QComboBox[class="settings_combo_box"] {
+   min-width: 350px;
+   margin-left: 9px;
+}
+
+QListWidget {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+QListWidget::item {
+    padding: 10px
+}
+
+QTextEdit {
+    border: 2px solid #8f8f8f;
+    border-radius: 5px;
+    margin-top: 2ex;
+}
+
+QHeaderView::section {
+    padding: 5px 15px 5px 5px;
+}
+
+QToolTip {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    padding: 6px;
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   SPECIFIC WIDGETS
+   ========================================================================== */
+
+/* There is a bug with placeholder text and QDarkTheme. This is a workaround so the text is at least readable
+in both theme. */
+
+QTextEdit#Console {
+    placeholder-text-color: #8A8A8A;
+    font-weight: bold;
+    margin-top: 0px;
+}
+
+QWidget#DragDropContainer {
+    border: 2px dashed #8f8f8f;
+    background-color: #8f8f8f8f;
+    border-radius: 10px;
+}
+
+QWidget#DragDropContainer[dragging="true"] {
+    border: 2px dashed #8f8f8f;
+    background-color: #cf8f8f8f;
+    border-radius: 10px;
+}
+
+QPushButton#DragBrowseButton {
+    padding: 6px 12px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+QLabel#DragBrowseLabel {
+    background: transparent;
+}
+
+QWidget#CollapsibleSectionTitle {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 5px;
+    min-height: 60px;
+    border: None;
+}
+
+QPlainTextEdit#ReferenceImportTextEdit {
+    border: 3px solid #0000FF;
+}

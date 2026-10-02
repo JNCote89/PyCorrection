@@ -1,0 +1,83 @@
+[workspace]
+authors = ["JNCote89 <Jean-Nicolas.Cote@USherbrooke.ca>"]
+channels = ["conda-forge"]
+name = "PyCorrection"
+platforms = ["linux-64", "win-64"]
+version = "0.1.0"
+
+
+[dependencies]
+python = "3.14.*"
+pyside6 = ">=6.11.2,<7"
+openpyxl = ">=3.1.5,<4"
+tomlkit = ">=0.15.0,<0.16"
+pydantic = ">=2.13.4,<3"
+sqlalchemy = ">=2.0.51,<3"
+pixi-pycharm = ">=0.0.11,<0.0.12"
+pypandoc = ">=1.17,<2"
+habanero = ">=2.9.2,<3"
+rapidfuzz = ">=3.14.6,<4"
+pypdf = ">=6.17.0,<7"
+bs4 = ">=4.15.0,<5"
+requests = ">=2.34.2,<3"
+platformdirs = ">=4.11.6,<5"
+httpx = ">=0.28.1,<0.29"
+matplotlib = ">=3.11.1,<4"
+pandas = ">=3.0.5,<4"
+nuitka = ">=4.2.2,<5"
+
+[pypi-dependencies]
+pyqtdarktheme = ">=2.1.0, <3"
+pdftitle = ">=0.20, <0.21"
+pypandoc-binary = ">=1.17, <2"
+
+[target.linux-64.dependencies]
+xorg-libx11 = ">=1.8.13,<2"
+fontconfig = ">=2.18.3,<3"
+
+[feature.build.dependencies]
+zstandard = "*"
+nuitka = ">=4.2.2,<5"
+ccache = "*"
+
+[feature.build.target.linux-64.dependencies]
+patchelf = "*"
+
+[environments]
+default = ["default"]
+build = ["default", "build"]
+
+[tasks]
+compile = """
+nuitka \
+src/py_correction/main.py \
+--mode=app-dist \
+--enable-plugin=pyside6 \
+--include-package-data=pypandoc \
+--include-data-dir=src/py_correction/assets=src/py_correction/assets \
+--output-dir=dist \
+--output-filename=PyCorrection \
+--linux-create-installer \
+--linux-app-icon=src/py_correction/assets/logo/logo.png \
+--linux-installer-output=dist/PyCorrection-Linux-x86_64.AppImage \
+--company-name=FOSS \
+--product-name=PyCorrection \
+--product-version=0.1 \
+"""
+
+[target.win-64.tasks]
+compile = """
+nuitka \
+src/py_correction/main.py \
+--mode=onefile \
+--enable-plugin=pyside6 \
+--include-package-data=pypandoc \
+--include-data-dir=src/py_correction/assets=src/py_correction/assets \
+--output-dir=dist \
+--output-filename=PyCorrection-Windows-x64.exe \
+--windows-icon-from-ico=src/py_correction/assets/logo/logo.ico \
+--windows-console-mode=disable \
+--company-name=FOSS \
+--product-name=PyCorrection \
+--product-version=0.1 \
+"""
