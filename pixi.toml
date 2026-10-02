@@ -73,6 +73,7 @@ src/py_correction/main.py \
 --mode=onefile \
 --enable-plugin=pyside6 \
 --assume-yes-for-downloads \
+--windows-console-mode=force \
 --include-package-data=pypandoc \
 --include-data-dir=src/py_correction/assets=src/py_correction/assets \
 --output-dir=dist \
