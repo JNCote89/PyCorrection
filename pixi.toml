@@ -7,7 +7,7 @@ version = "0.1.0"
 
 
 [dependencies]
-python = "3.14.*"
+python = "3.12.*"
 pyside6 = ">=6.11.2,<7"
 openpyxl = ">=3.1.5,<4"
 tomlkit = ">=0.15.0,<0.16"
@@ -78,7 +78,6 @@ src/py_correction/main.py \
 --output-dir=dist \
 --output-filename=PyCorrection-Windows-x64.exe \
 --windows-icon-from-ico=src/py_correction/assets/logo/logo.ico \
---windows-console-mode=disable \
 --company-name=FOSS \
 --product-name=PyCorrection \
 --product-version=0.1 \

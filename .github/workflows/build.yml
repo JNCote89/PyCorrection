@@ -10,13 +10,24 @@ on:
       - '**.md'
       - 'docs/**'
 
-  workflow_dispatch:     # Allows manual trigger from the GitHub UI
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Target platform to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - linux
+          - windows
 
 jobs:
   # ---------------------------------------------------------------------------
   # 1. Linux Build Job
   # ---------------------------------------------------------------------------
   build-linux:
+    if: inputs.platform == 'all' || inputs.platform == 'linux' || github.event_name != 'workflow_dispatch'
     name: Build Linux AppImage
     runs-on: ubuntu-latest
 
@@ -27,7 +38,7 @@ jobs:
       - name: Install baseline tools inside container
         run: |
           apt-get update
-          apt-get install -y git curl sudo build-essential binutils
+          apt-get install -y git curl sudo build-essential binutils libfuse2 file zlib1g-dev
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -66,6 +77,7 @@ jobs:
   # 2. Windows Build Job
   # ---------------------------------------------------------------------------
   build-windows:
+    if: inputs.platform == 'all' || inputs.platform == 'windows' || github.event_name != 'workflow_dispatch'
     name: Build Windows Executable
     runs-on: windows-latest
 
