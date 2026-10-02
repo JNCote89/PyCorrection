@@ -27,7 +27,7 @@ jobs:
       - name: Install baseline tools inside container
         run: |
           apt-get update
-          apt-get install -y git curl sudo
+          apt-get install -y git curl sudo build-essential binutils
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,6 +46,8 @@ jobs:
 
       - name: Compile AppImage via Pixi
         run: pixi run -e build compile
+        env:
+          NUITKA_ASSUME_YES_FOR_DOWNLOADS: "yes"
 
       - name: Verify build output
         shell: bash
@@ -78,8 +80,11 @@ jobs:
           run-install: true
           environments: build
 
+
       - name: Compile Executable via Pixi
         run: pixi run -e build compile
+        env:
+          NUITKA_ASSUME_YES_FOR_DOWNLOADS: "yes"
 
       - name: Verify build output
         shell: bash

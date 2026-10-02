@@ -53,6 +53,7 @@ nuitka \
 src/py_correction/main.py \
 --mode=app-dist \
 --enable-plugin=pyside6 \
+--assume-yes-for-downloads \
 --include-package-data=pypandoc \
 --include-data-dir=src/py_correction/assets=src/py_correction/assets \
 --output-dir=dist \
@@ -71,6 +72,7 @@ nuitka \
 src/py_correction/main.py \
 --mode=onefile \
 --enable-plugin=pyside6 \
+--assume-yes-for-downloads \
 --include-package-data=pypandoc \
 --include-data-dir=src/py_correction/assets=src/py_correction/assets \
 --output-dir=dist \
