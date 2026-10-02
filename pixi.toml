@@ -44,8 +44,8 @@ ccache = "*"
 patchelf = "*"
 
 [environments]
-default = ["default"]
-build = ["default", "build"]
+default = []
+build = ["build"]
 
 [tasks]
 compile = """
