@@ -1,6 +1,7 @@
 # Pixi environment directory
 .pixi/*
 !.pixi/config.toml
+/.pixi/
 
 # Python caches and build files
 __pycache__/
@@ -8,10 +9,13 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+/data/
 
 # IDE / OS settings
 .vscode/
 .idea/
 .DS_Store
+
+
 
 

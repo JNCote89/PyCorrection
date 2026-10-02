@@ -1,0 +1,129 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*.*" ]  # Triggers release job when pushing version tags
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+  workflow_dispatch:     # Allows manual trigger from the GitHub UI
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1. Linux Build Job (Runs inside Ubuntu 20.04 Container for glibc compatibility)
+  # ---------------------------------------------------------------------------
+  build-linux:
+    name: Build Linux AppImage
+    runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu:20.04
+
+    steps:
+      - name: Install baseline tools inside container
+        run: |
+          apt-get update
+          apt-get install -y git curl sudo
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Pixi environment
+        uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          pixi-version: v0.40.0
+          environments: build
+          cache: true
+
+      - name: Install Linux build dependencies (X11 / OpenGL for PySide6)
+        run: |
+          apt-get update
+          apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libgl1-mesa-glx libegl1-mesa
+
+      - name: Compile AppImage via Pixi
+        run: pixi run -e build compile
+
+      - name: Verify build output
+        shell: bash
+        run: |
+          echo "Listing generated distribution files:"
+          ls -la dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PyCorrection-Linux
+          path: dist/PyCorrection-Linux-x86_64.AppImage
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # 2. Windows Build Job (Runs natively on windows-latest)
+  # ---------------------------------------------------------------------------
+  build-windows:
+    name: Build Windows Executable
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Pixi environment
+        uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          pixi-version: v0.40.0
+          environments: build
+          cache: true
+
+      - name: Compile Executable via Pixi
+        run: pixi run -e build compile
+
+      - name: Verify build output
+        shell: bash
+        run: |
+          echo "Listing generated distribution files:"
+          ls -la dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PyCorrection-Windows
+          path: dist/PyCorrection-Windows-x64.exe
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # 3. Release Job (Runs ONLY when a tag like 'v0.1.0' is pushed)
+  # ---------------------------------------------------------------------------
+  release:
+    name: Create GitHub Release
+    needs: [build-linux, build-windows]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+
+    # Required permissions for GITHUB_TOKEN to publish releases
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PyCorrection-Linux
+          path: ./release-files
+
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PyCorrection-Windows
+          path: ./release-files
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release-files/*
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
