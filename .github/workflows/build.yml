@@ -35,7 +35,7 @@ jobs:
       - name: Set up Pixi environment
         uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: v0.58.0
+          pixi-version: "latest"
           run-install: true
           environments: build
 
@@ -74,7 +74,7 @@ jobs:
       - name: Set up Pixi environment
         uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: v0.58.0
+          pixi-version: "latest"
           run-install: true
           environments: build
 
