@@ -26,7 +26,7 @@ class APATextParser:
         self._href_style = href_style
 
     @cached_property
-    def year(self) -> int | NOT_AVAILABLE:
+    def year(self) -> "int | NOT_AVAILABLE":
         regex_year = re.search(r'\([^)]*?(\d{4})[^)]*\)', self.reference)
         if regex_year:
             return int(regex_year.group(1))
