@@ -7,7 +7,7 @@ version = "0.1.0"
 
 
 [dependencies]
-python = "3.12.*"
+python = "3.12.*" # Bugs with PySide6 Signals and Nuitka with version above 3.12
 pyside6 = ">=6.11.2,<7"
 openpyxl = ">=3.1.5,<4"
 tomlkit = ">=0.15.0,<0.16"
@@ -22,14 +22,15 @@ bs4 = ">=4.15.0,<5"
 requests = ">=2.34.2,<3"
 platformdirs = ">=4.11.6,<5"
 httpx = ">=0.28.1,<0.29"
-matplotlib = ">=3.11.1,<4"
 pandas = ">=3.0.5,<4"
 nuitka = ">=4.2.2,<5"
+imageio = ">=2.38.0,<3"
 
 [pypi-dependencies]
 pyqtdarktheme = ">=2.1.0, <3"
 pdftitle = ">=0.20, <0.21"
 pypandoc-binary = ">=1.17, <2"
+matplotlib = ">=3.11.2, <4" # Bugs when compiled on Windows if not using pypi wheel
 
 [target.linux-64.dependencies]
 xorg-libx11 = ">=1.8.13,<2"
@@ -48,38 +49,37 @@ default = []
 build = ["build"]
 
 [tasks]
-compile = """
-nuitka \
-src/py_correction/main.py \
---mode=app-dist \
+_nuitka_base = """nuitka \
 --enable-plugin=pyside6 \
 --assume-yes-for-downloads \
 --include-package-data=pypandoc \
 --include-data-dir=src/py_correction/assets=src/py_correction/assets \
 --output-dir=dist \
 --output-filename=PyCorrection \
---linux-create-installer \
---linux-app-icon=src/py_correction/assets/logo/logo.png \
---linux-installer-output=dist/PyCorrection-Linux-x86_64.AppImage \
 --company-name=FOSS \
 --product-name=PyCorrection \
---product-version=0.1 \
-"""
+--product-version=0.1"""
+
+[target.linux-64.tasks]
+compile = { depends-on = [{ task = "_nuitka_base",
+    args = [
+        "--mode=app-dist",
+        "--linux-create-installer",
+        "--linux-app-icon=src/py_correction/assets/logo/logo.png",
+        "--linux-installer-output=dist/PyCorrection-Linux-x86_64.AppImage",
+        "src/py_correction/main.py"
+    ] }
+] }
+
 
 [target.win-64.tasks]
-compile = """
-nuitka \
-src/py_correction/main.py \
---mode=onefile \
---enable-plugin=pyside6 \
---assume-yes-for-downloads \
---windows-console-mode=force \
---include-package-data=pypandoc \
---include-data-dir=src/py_correction/assets=src/py_correction/assets \
---output-dir=dist \
---output-filename=PyCorrection-Windows-x64.exe \
---windows-icon-from-ico=src/py_correction/assets/logo/logo.ico \
---company-name=FOSS \
---product-name=PyCorrection \
---product-version=0.1 \
-"""
+compile = { depends-on = [{ task = "_nuitka_base",
+    args = [
+        "--mode=onefile",
+        "--windows-console-mode=disable",
+        "--onefile-windows-splash-screen-image=src/py_correction/assets/logo/logo.png",
+        "--output-filename=PyCorrection-Windows-x64.exe",
+        "--windows-icon-from-ico=src/py_correction/assets/logo/logo.ico",
+        "src/py_correction/main.py"
+    ] }
+] }

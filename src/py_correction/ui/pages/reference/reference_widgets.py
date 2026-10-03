@@ -479,6 +479,8 @@ class ReferenceTypeStackedBarChart(PartialFigure):
         self._draw_chart()
 
     def _draw_chart(self) -> None:
+        """Must not call self.draw() here to avoid a bug in Windows when compiled with Nuitka. The drawing is done
+        in the parent method on showEvent()"""
         # ToDo: Clean up the method with smaller protected methods
         self.figure.clf()
         self.axes = self.figure.add_subplot(111)
@@ -514,7 +516,6 @@ class ReferenceTypeStackedBarChart(PartialFigure):
                            fontsize=4,
                            color=text_color,
                            alpha=0.9)
-            self.draw()
             return
 
         grey_bar = self.axes.bar(self._data.bins, self._data.grey_counts,
@@ -587,8 +588,6 @@ class ReferenceTypeStackedBarChart(PartialFigure):
         self.axes.set_title("Distribution par année du type de références",
                             color=text_color, fontsize=title_fontsize, pad=16)
 
-        self.draw()
-
 
 class EvidenceLevelPieChart(PartialFigure):
     is_final_component = True
@@ -611,6 +610,8 @@ class EvidenceLevelPieChart(PartialFigure):
         self._draw_chart()
 
     def _draw_chart(self) -> None:
+        """Must not call self.draw() here to avoid a bug in Windows when compiled with Nuitka. The drawing is done
+        in the parent method on showEvent()"""
         # ToDo: Clean up the method with smaller protected methods
         self.figure.clf()
         self.axes = self.figure.add_subplot(111)
@@ -647,7 +648,6 @@ class EvidenceLevelPieChart(PartialFigure):
                            color=text_color,
                            alpha=0.9)
 
-            self.draw()
             return
 
         wedges, texts, autotexts = self.axes.pie(self._data.values, labels=self._data.labels,
@@ -677,5 +677,3 @@ class EvidenceLevelPieChart(PartialFigure):
                        fontsize=4,
                        color=text_color,
                        alpha=0.9)
-
-        self.draw()
