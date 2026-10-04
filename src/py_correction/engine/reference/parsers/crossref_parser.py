@@ -1,6 +1,7 @@
 import html
 import json
 import logging
+import os
 import re
 import tempfile
 
@@ -18,25 +19,33 @@ def format_crossref_to_csl(crossref_message: dict, csl_style_name: str = DEFAULT
     csl_item = _crossref_json_to_csl_item(crossref_message=crossref_message, citekey=citekey)
     csl_database = [csl_item]
 
-    with tempfile.NamedTemporaryFile("w+", suffix=".json", encoding="utf-8") as bibliography_file:
-        csl_file_path = paths.CSL_STYLES.joinpath(csl_style_name)
-
+    # Create temporary file without auto-deletion and close handle before Pandoc runs
+    bibliography_file = tempfile.NamedTemporaryFile("w+", suffix=".json", encoding="utf-8", delete=False)
+    try:
         json.dump(csl_database, bibliography_file)
-        bibliography_file.flush()
+        bibliography_file.close()  # Releases the file handle so Pandoc can read it on Windows
+
+        csl_file_path = paths.CSL_STYLES.joinpath(csl_style_name)
 
         # Force an explicit citation in the text body so the CSL engine renders it
         markdown_input = f"Force render: @{citekey} -DISCARD-"
 
-        extra_args = [f"--citeproc",
-                      f"--bibliography={bibliography_file.name}",
-                      f"--csl={csl_file_path.as_posix()}", ]
+        extra_args = [
+            "--citeproc",
+            f"--bibliography={bibliography_file.name}",
+            f"--csl={csl_file_path.as_posix()}",
+        ]
 
         output = pypandoc.convert_text(source=markdown_input, to="plain", format="markdown", extra_args=extra_args)
 
         # Discard the citation triggers
         output_references = output.split("-DISCARD-")[-1].strip()
-
         return output_references.strip()
+
+    finally:
+        # Guarantee cleanup of temporary file
+        if os.path.exists(bibliography_file.name):
+            os.unlink(bibliography_file.name)
 
 
 def _clean_crossref_text(text: str, preserve_formatting: bool = True) -> str:
