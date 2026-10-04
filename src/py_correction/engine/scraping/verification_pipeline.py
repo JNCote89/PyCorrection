@@ -107,7 +107,8 @@ class ScientificReferenceVerificationPipeline(BaseVerificationPipeline[Scientifi
 
             titles = message.get("title")
             title = titles[0] if isinstance(titles, list) and titles else None
-
+            print(f"Scientific title {title}")
+            print(f"The cross ref return is {context.dto.cross_reference}")
             # In case the pypandoc parser chocks on weird characters in the metadata
             if title:
                 context.dto.cross_reference = f"Le titre de la référence fournie est : {title}"

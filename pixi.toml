@@ -51,36 +51,4 @@ default = []
 build = ["build"]
 
 [tasks]
-_nuitka_base = """nuitka \
---enable-plugin=pyside6 \
---assume-yes-for-downloads \
---include-package-data=pypandoc \
---include-data-dir=src/py_correction/assets=src/py_correction/assets \
---output-dir=dist \
---output-filename=PyCorrection \
---company-name=FOSS \
---product-name=PyCorrection \
---product-version=0.1"""
-
-[target.linux-64.tasks]
-compile = { depends-on = [{ task = "_nuitka_base",
-    args = [
-        "--mode=app-dist",
-        "--linux-create-installer",
-        "--linux-app-icon=src/py_correction/assets/logo/logo.png",
-        "--linux-installer-output=dist/PyCorrection-Linux-x86_64.AppImage",
-        "src/py_correction/main.py"
-    ] }
-] }
-
-[target.win-64.tasks]
-compile = { depends-on = [{ task = "_nuitka_base",
-    args = [
-        "--mode=onefile",
-        "--windows-console-mode=disable",
-        "--onefile-windows-splash-screen-image=src/py_correction/assets/logo/nuitka_logo.png",
-        "--output-filename=PyCorrection-Windows-x64.exe",
-        "--windows-icon-from-ico=src/py_correction/assets/logo/logo.ico",
-        "src/py_correction/main.py"
-    ] }
-] }
+compile = "python build.py"
