@@ -47,8 +47,8 @@ def build():
         ]
     elif system == "windows":
         platform_args = [
-            "--mode=standalone",
-            "--windows-console-mode=force",
+            "--mode=onefile",
+            "--windows-console-mode=disable",
             "--onefile-windows-splash-screen-image=src/py_correction/assets/logo/nuitka_logo.png",
             "--output-filename=PyCorrection-Windows-x64.exe",
             "--windows-icon-from-ico=src/py_correction/assets/logo/logo.ico",
