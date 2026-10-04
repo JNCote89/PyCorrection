@@ -25,6 +25,7 @@ def build():
         "-m",
         "nuitka",
         "--enable-plugin=pyside6",
+        "--enable-plugin=matplotlib",
         "--assume-yes-for-downloads",
         "--include-package-data=pypandoc",
         f"--include-data-files={get_pypandoc_files_pattern()}",

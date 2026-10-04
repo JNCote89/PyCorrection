@@ -1,11 +1,7 @@
+import logging
 from pathlib import Path
 
-import matplotlib
 from typing_extensions import override
-
-matplotlib.use("QtAgg")
-
-import logging
 
 # Introduces bug with PySide. The fonts are set inside the theme manager module.
 logging.getLogger('matplotlib.font_manager').disabled = True

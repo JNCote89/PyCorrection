@@ -16,6 +16,9 @@ def custom_excepthook(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = custom_excepthook
 
+import matplotlib
+matplotlib.use("QtAgg")
+
 from src.py_correction.ui.app import PyCorrectionApp
 
 
