@@ -37,8 +37,6 @@ class ReferenceGradePlotChart(PartialFigure):
         self._draw_chart()
 
     def _draw_chart(self) -> None:
-        """Must not call self.draw() here to avoid a bug in Windows when compiled with Nuitka. The drawing is done
-        in the parent method on showEvent()"""
         # ToDo: Clean up the method with smaller protected methods
         self.figure.clf()
 
@@ -82,6 +80,7 @@ class ReferenceGradePlotChart(PartialFigure):
                             fontsize=4,
                             color=text_color,
                             alpha=0.9)
+            self.draw_idle()
             return
 
         grey_bar = self.axes1.bar(self._data.bins, self._data.grey_counts,
@@ -168,3 +167,4 @@ class ReferenceGradePlotChart(PartialFigure):
         target_height_px = int(fixed_height * self.figure.dpi)
 
         self.setMinimumSize(target_width_px, target_height_px)
+        self.draw_idle()

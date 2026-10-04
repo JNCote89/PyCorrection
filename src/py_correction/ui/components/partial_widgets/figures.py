@@ -10,7 +10,7 @@ logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PySide6.QtCore import Qt, QPoint, Slot, QStandardPaths
-from PySide6.QtGui import QWheelEvent, QShowEvent
+from PySide6.QtGui import QWheelEvent
 from PySide6.QtWidgets import QMenu, QFileDialog
 
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
@@ -43,15 +43,6 @@ class PartialFigure(FigureCanvasQTAgg, WidgetLifecycleMixin):
 
     def update_save_path(self, save_path: Path | str) -> None:
         self._save_path = Path(save_path)
-
-    @override
-    def showEvent(self, event: QShowEvent):
-        super().showEvent(event)
-        if self._is_first_show:
-            self._is_first_show = False
-            # Must implement this idle method and never invoke self.draw(), because it causes a bug in Windows when
-            # compiled with Nuitka
-            self.draw_idle()
 
     @override
     def wheelEvent(self, event: QWheelEvent) -> None:
