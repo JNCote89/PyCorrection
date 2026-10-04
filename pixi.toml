@@ -14,7 +14,6 @@ tomlkit = ">=0.15.0,<0.16"
 pydantic = ">=2.13.4,<3"
 sqlalchemy = ">=2.0.51,<3"
 pixi-pycharm = ">=0.0.11,<0.0.12"
-pypandoc = ">=1.17,<2"
 habanero = ">=2.9.2,<3"
 rapidfuzz = ">=3.14.6,<4"
 pypdf = ">=6.17.0,<7"
@@ -31,15 +30,18 @@ pyqtdarktheme = ">=2.1.0, <3"
 pdftitle = ">=0.20, <0.21"
 pypandoc-binary = ">=1.17, <2"
 matplotlib = ">=3.11.2, <4" # Bugs when compiled on Windows if not using pypi wheel
+zstandard = ">=0.25.0, <0.26"
 
 [target.linux-64.dependencies]
 xorg-libx11 = ">=1.8.13,<2"
 fontconfig = ">=2.18.3,<3"
 
 [feature.build.dependencies]
-zstandard = "*"
 nuitka = ">=4.2.2,<5"
 ccache = "*"
+
+[feature.build.pypi-dependencies]
+zstandard = "*"
 
 [feature.build.target.linux-64.dependencies]
 patchelf = "*"
@@ -71,13 +73,12 @@ compile = { depends-on = [{ task = "_nuitka_base",
     ] }
 ] }
 
-
 [target.win-64.tasks]
 compile = { depends-on = [{ task = "_nuitka_base",
     args = [
         "--mode=onefile",
         "--windows-console-mode=disable",
-        "--onefile-windows-splash-screen-image=src/py_correction/assets/logo/logo.png",
+        "--onefile-windows-splash-screen-image=src/py_correction/assets/logo/nuitka_logo.png",
         "--output-filename=PyCorrection-Windows-x64.exe",
         "--windows-icon-from-ico=src/py_correction/assets/logo/logo.ico",
         "src/py_correction/main.py"

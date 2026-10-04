@@ -1,3 +1,5 @@
+import os
+import tempfile
 import traceback
 from typing import TYPE_CHECKING
 
@@ -79,6 +81,7 @@ class PyCorrectionApp(QApplication):
         self._ui_manager = ui_manager
 
     def run(self):
+        self._dismiss_nuitka_splash()
         """Boots up the splash screen and schedules the asynchronous app load."""
         splash = QSplashScreen(self._create_splash_pixmap(), Qt.WindowStaysOnTopHint)  # type: ignore
         splash.showMessage("""
@@ -118,6 +121,17 @@ class PyCorrectionApp(QApplication):
 
         painter.end()
         return pixmap
+
+    @staticmethod
+    def _dismiss_nuitka_splash():
+        if "NUITKA_ONEFILE_PARENT" in os.environ:
+            splash_filename = os.path.join(tempfile.gettempdir(),
+                                           "onefile_%d_splash_feedback.tmp" % int(os.environ["NUITKA_ONEFILE_PARENT"]))
+            if os.path.exists(splash_filename):
+                try:
+                    os.unlink(splash_filename)
+                except OSError:
+                    pass
 
     def _load_and_start(self, splash: QSplashScreen):
         """ Start the app once the splash screen is displayed """
