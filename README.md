@@ -6,7 +6,7 @@ Merci de bien vouloir me signaler tout problème pour m'aider à corriger les bu
 au plus grand nombre d'utilisateurs possible! Les fichiers à télécharger sont dans la section Releases (dans la bar 
 de navigation à droite, entre About et Packages)
 
-### Instructions pour l'installation sur Windows
+### Instructions pour l'installation sur Windows 10 et 11
 
 Vous devez télécharger le fichier Application-PyCorrection-Windows-x64.zip dans un répertoire qui ne nécessite pas de privilèges administrateurs (e.g., Documents). Vous pouvez ajouter un répertoire à l'intérieur de celui-ci pour mieux organiser les fichiers (e.g., Documents\Université). Le programme ne fonctionnera pas dans un répertoire comme C:/Program Files ou C:/Program Files (x86). 
 
