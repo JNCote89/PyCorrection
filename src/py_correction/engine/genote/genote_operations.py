@@ -19,7 +19,7 @@ class GeNoteGradeFileOperations:
     def add_grades(self, genote_transaction_dtos: list[GeNoteTransactionDTO]) -> list[str] | None:
         failed_operations = []
 
-        with excel_operations.safe_load_workbook(excel_path=self.file_path, data_only=True) as wb:
+        with excel_operations.safe_load_workbook(excel_path=self.file_path) as wb:
             if wb is None:
                 logger.warning(f"""La feuille GeNote dans le répertoire {self.file_path} n'a pas pu être modifiée.
                                    Impossible d'ajouter des notes. Veuillez vérifier l'intégrité du fichier.""")
