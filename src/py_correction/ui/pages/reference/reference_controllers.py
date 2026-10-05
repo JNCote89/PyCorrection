@@ -438,8 +438,6 @@ class ReferenceStatisticsController(BaseController):
         nuitka_helpers.safe_connect(signal=self._event_bus.settings.userRootDirectoryChanged,
                                     slot=self._section_view.update_figures_save_path)
 
-        nuitka_helpers.safe_connect(signal=self._event_bus.selection_widget.studentIDChanged, slot=self.clear_charts)
-
     @override
     def _connect_downstream_signals(self) -> None:
         nuitka_helpers.safe_connect(signal=self._section_view.launchStatsClicked, slot=self._launch_stats_generation)

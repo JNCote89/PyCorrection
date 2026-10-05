@@ -37,7 +37,7 @@ class AppOnlyFilter(logging.Filter):
         return any(record.name.startswith(prefix) for prefix in self.allowed_prefixes)
 
 
-def setup_logging(app_module_name="py_correction"):
+def setup_logging(app_module_name="src"):
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
 
