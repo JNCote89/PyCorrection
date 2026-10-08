@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 
 from src.py_correction.core.domains.grade.grade_dtos import UpdateGradeDTO
 from src.py_correction.core.domains.reference.reference_dtos import ReferenceTableDTO
-from src.py_correction.core.domains.reference.reference_enums import ReferenceTypeEnum
+from src.py_correction.core.domains.reference.reference_enums import (ReferenceTypeEnum,
+                                                                      ReferenceVerificationStatusEnum,
+                                                                      RelevanceLevelEnum)
 from src.py_correction.core.domains.reference.reference_figures_dtos import GradeReferencePlotDTO
 from src.py_correction.database.student.models.student_evaluation_orm import StudentEvaluationORM
 from src.py_correction.database.student.student_evaluation_CRUD import StudentEvaluationCRUD
@@ -105,17 +107,24 @@ class StudentEvaluationServices:
 
     @staticmethod
     def _extract_grey_literature_counts(db_records: list[StudentEvaluationORM]) -> list[int]:
-        return [sum(ref.reference_type == ReferenceTypeEnum.GREY for ref in (db_record.references or []))
+        return [sum(ref.reference_type == ReferenceTypeEnum.GREY
+                for ref in (db_record.references or []) if
+                    ref.relevance == RelevanceLevelEnum.RELEVANT and
+                    ref.verification_status == ReferenceVerificationStatusEnum.VALID)
                 for db_record in db_records]
 
     @staticmethod
     def _extract_scientific_no_review_counts(db_records: list[StudentEvaluationORM]) -> list[int]:
-        return [
-            sum(ref.reference_type == ReferenceTypeEnum.SCIENTIFIC_NO_REVIEW for ref in (db_record.references or []))
+        return [sum(ref.reference_type == ReferenceTypeEnum.SCIENTIFIC_NO_REVIEW
+                for ref in (db_record.references or []) if
+                    ref.relevance == RelevanceLevelEnum.RELEVANT and
+                    ref.verification_status == ReferenceVerificationStatusEnum.VALID)
             for db_record in db_records]
 
     @staticmethod
     def _extract_scientific_review_literature_counts(db_records: list[StudentEvaluationORM]) -> list[int]:
-        return [
-            sum(ref.reference_type == ReferenceTypeEnum.SCIENTIFIC_PEER_REVIEW for ref in (db_record.references or []))
+        return [sum(ref.reference_type == ReferenceTypeEnum.SCIENTIFIC_PEER_REVIEW
+                for ref in (db_record.references or []) if
+                    ref.relevance == RelevanceLevelEnum.RELEVANT and
+                    ref.verification_status == ReferenceVerificationStatusEnum.VALID)
             for db_record in db_records]

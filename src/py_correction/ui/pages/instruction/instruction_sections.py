@@ -258,7 +258,7 @@ class QuickStartCollapsibleSection(QWidget, WidgetLifecycleMixin):
             saillants :
             <ul>
             <li style='line-height:1.5;'><b>Vérification</b><br>
-            L'application compare les informations des métadonnées avec les références soumises par l'étudiant. 
+            L'application compare les informations des métadonnées de Crossref avec les références soumises par l'étudiant. 
             L'application ne va jamais décréter qu'une référence est invalide, car des métadonnées mal formatées peuvent
             introduire des faux positifs. Pour éviter d'accuser faussement un étudiant de plagiat, il faut minimalement
             vérifier si le titre de la référence retourne un résultat dans Google. Les chances de faux négatifs sont 
@@ -308,6 +308,7 @@ class QuickStartCollapsibleSection(QWidget, WidgetLifecycleMixin):
             dans les métadonnées à cet égard, il ne faut pas pénaliser si la date dans la colonne des métadonnées 
             retourne un résultat à \U000000B1 1 an près.  
             </li>
+            </ul>
             
             """)
 
@@ -449,7 +450,7 @@ class OptionsCollapsibleSection(QWidget, WidgetLifecycleMixin):
             devraient être utilisées qu'en l'absence d'une feuille GeNote (e.g., pour accompagner des étudiants aux
             études graduées ou pour des projets spéciaux).
             </li>
-               <p>
+            </ul>
                """)
 
     @override
