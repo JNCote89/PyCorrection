@@ -101,7 +101,7 @@ class ReferenceGradePlotChart(PartialFigure):
         self.axes1.set_xticks(self._data.bins)
         self.axes1.set_xticklabels(self._data.bins, rotation=45, ha='right')
         self.axes1.set_xlim(-1, len(self._data.bins))
-        self.axes1.set_ylim(0, 150)
+        self.axes1.set_ylim(0, 100)
 
         self.axes2 = self.axes1.twinx()
         self.axes2.scatter(self._data.bins, self._data.grades, s=0.5, color='red', label=self._data.grade_label,
@@ -144,6 +144,7 @@ class ReferenceGradePlotChart(PartialFigure):
         self.axes2.tick_params(axis='y', labelsize=tick_fontsize, colors=text_color, width=0.05, length=3)
 
         self.axes1.minorticks_on()
+        self.axes2.minorticks_on()
         self.axes1.tick_params(axis='x', which='minor', length=0)
 
         self.axes1.tick_params(axis='y', which='minor', length=1.5, width=0.025, color=text_color)
