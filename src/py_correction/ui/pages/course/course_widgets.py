@@ -7,6 +7,7 @@ from PySide6.QtCore import (QAbstractTableModel, QModelIndex, QObject, QPersiste
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_dtos import CourseCreateDTO, CourseTableDTO
 from src.py_correction.core.domains.shared.shared_enums import ImportTypeEnum
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
@@ -99,11 +100,11 @@ class CourseImportFormWidget(QWidget, WidgetLifecycleMixin):
     def _connect_internal_signals(self) -> None:
         self._setup_validators()
 
-        self._course_name_input.textChanged.connect(self._validate_form)
-        self._semester_input.textChanged.connect(self._validate_form)
-        self._course_code_input.textChanged.connect(self._validate_form)
-        self._group_input.textChanged.connect(self._validate_form)
-        self._submit_button.clicked.connect(self._on_submit)
+        nuitka_helpers.safe_connect(signal=self._course_name_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._semester_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._course_code_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._group_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._submit_button.clicked, slot=self._on_submit)
 
     def _setup_validators(self) -> None:
         semester_regex = QRegularExpression(r"^[AHEahe]{1}\d{4}$")

@@ -1,7 +1,8 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QTextCursor
 from PySide6.QtWidgets import QMenu, QTextEdit
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.logger import qt_log_bridge
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 
@@ -17,11 +18,13 @@ class PartialLogConsoleWidget(QTextEdit, WidgetLifecycleMixin):
         self.setReadOnly(True)
         self.document().setMaximumBlockCount(1000)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu) # type: ignore[arg-type]
-        self.customContextMenuRequested.connect(self.show_context_menu)
 
-        qt_log_bridge.log_emitted.connect(self.append_log)
+        nuitka_helpers.safe_connect(signal=self.customContextMenuRequested, slot=self.show_context_menu)
 
-    def append_log(self, formatted_message: str):
+        nuitka_helpers.safe_connect(signal=qt_log_bridge.log_emitted, slot=self.append_log)
+
+    @Slot(str, str)
+    def append_log(self, formatted_message: str, record_level: str):
         safe_msg = formatted_message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         html_msg = f"<span>{safe_msg}</span>"
 
@@ -32,18 +35,19 @@ class PartialLogConsoleWidget(QTextEdit, WidgetLifecycleMixin):
         menu = QMenu(self)
 
         copy_action = QAction("Copier la sélection", self)
-        copy_action.triggered.connect(self.copy)
+        nuitka_helpers.safe_connect(signal=copy_action.triggered, slot=self.copy)
+
         copy_action.setEnabled(self.textCursor().hasSelection())
         menu.addAction(copy_action)
 
         copy_all_action = QAction("Copier tous les logs", self)
-        copy_all_action.triggered.connect(self.copy_all_logs)
+        nuitka_helpers.safe_connect(signal=copy_all_action.triggered, slot=self.copy_all_logs)
         menu.addAction(copy_all_action)
 
         menu.addSeparator()
 
         clear_action = QAction("Effacer tous les logs", self)
-        clear_action.triggered.connect(self.clear)
+        nuitka_helpers.safe_connect(signal=clear_action.triggered, slot=self.clear)
         menu.addAction(clear_action)
 
         menu.exec(self.mapToGlobal(position)) # type: ignore[arg-type]

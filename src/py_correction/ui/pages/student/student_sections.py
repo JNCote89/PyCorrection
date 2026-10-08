@@ -3,6 +3,7 @@ from typing import override
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_student_dtos import CourseStudentTableDTO, CourseStudentUpdateDTO
 from src.py_correction.core.domains.student.student_dtos import StudentCreateDTO
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
@@ -37,7 +38,8 @@ class StudentImportFormCollapsibleSection(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._student_import_form_widget.studentFormSubmitted.connect(self.studentFormSubmitted)
+        nuitka_helpers.safe_connect(signal=self._student_import_form_widget.studentFormSubmitted,
+                                    slot=self.studentFormSubmitted)
 
     def set_collapsible_section_state(self, expanded: bool) -> None:
         self.collapsible_section.set_expand_state(expanded=expanded)
@@ -65,7 +67,8 @@ class StudentTableViewGroupbox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._student_table_model.studentStatusChanged.connect(self.studentStatusChanged)
+        nuitka_helpers.safe_connect(signal=self._student_table_model.studentStatusChanged,
+                                    slot=self.studentStatusChanged)
 
     @Slot(CourseStudentTableDTO)
     def set_students(self, students: list[CourseStudentTableDTO]) -> None:

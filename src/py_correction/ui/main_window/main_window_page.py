@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QMainWindow, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.dependency_injection import container
 from src.py_correction.ui.components.default_widgets.splitters import DefaultHalfSplitter
 from src.py_correction.ui.main_window.main_window_controller import MainWindowController
@@ -65,7 +66,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self._splitter)
 
     def _connect_internal_signals(self) -> None:
-        self._sidebar_list_widget.currentRowChanged.connect(self._pages_stacked_widget.setCurrentIndex)
+        nuitka_helpers.safe_connect(signal=self._sidebar_list_widget.currentRowChanged,
+                                    slot=self._pages_stacked_widget.setCurrentIndex)
 
     @override
     def closeEvent(self, event: QCloseEvent) -> None:

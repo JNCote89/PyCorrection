@@ -13,6 +13,7 @@ from PySide6.QtCore import Qt, QPoint, Slot, QStandardPaths
 from PySide6.QtGui import QWheelEvent
 from PySide6.QtWidgets import QMenu, QFileDialog
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 
 
@@ -25,7 +26,7 @@ class PartialFigure(FigureCanvasQTAgg, WidgetLifecycleMixin):
         self.setParent(parent)
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)  # type: ignore[arg-type]
-        self.customContextMenuRequested.connect(self._show_context_menu)
+        nuitka_helpers.safe_connect(signal=self.customContextMenuRequested, slot=self._show_context_menu)
 
         self._save_path = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DocumentsLocation)  # type: ignore[arg-type]
 

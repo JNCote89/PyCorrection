@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QPushButton, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.shared.shared_dtos import ComboBoxPayload
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.labels import DefaultDynamicLabel, DefaultLabel
@@ -67,9 +68,12 @@ class SubmissionsManagementGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_combo_box.evaluationIDChanged.connect(self.evaluationIDChanged)
-        self._moodle_import_widget.zipFileSubmitted.connect(self.moodleZipFileSubmitted)
-        self._make_student_correction_file_button.clicked.connect(self.makeStudentCorrectionButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._evaluation_combo_box.evaluationIDChanged,
+                                    slot=self.evaluationIDChanged)
+        nuitka_helpers.safe_connect(signal=self._moodle_import_widget.zipFileSubmitted,
+                                    slot=self.moodleZipFileSubmitted)
+        nuitka_helpers.safe_connect(signal=self._make_student_correction_file_button.clicked,
+                                    slot=self.makeStudentCorrectionButtonClicked)
 
     @Slot(ComboBoxPayload)
     def populate_evaluation_id_combo_box(self, payload: ComboBoxPayload) -> None:

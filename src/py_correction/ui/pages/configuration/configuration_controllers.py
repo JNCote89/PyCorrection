@@ -29,7 +29,8 @@ class ConfigurationsGroupBoxController(BaseController):
 
     @override
     def _connect_upstream_signals(self) -> None:
-        self._event_bus.settings.userRootDirectoryChanged.connect(self._section_view.update_user_root_directory_picker)
+        nuitka_helpers.safe_connect(signal=self._event_bus.settings.userRootDirectoryChanged,
+                                    slot=self._section_view.update_user_root_directory_picker)
 
     @override
     def _connect_downstream_signals(self) -> None:

@@ -5,6 +5,7 @@ from PySide6.QtCore import QRegularExpression, QSignalBlocker, Qt, Signal, Slot
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QLineEdit, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.evaluation.evaluation_dtos import EvaluationCreateDTO
 from src.py_correction.core.domains.shared.shared_dtos import ComboBoxPayload, SelectionWidgetDTO
 from src.py_correction.core.domains.shared.shared_enums import ImportTypeEnum
@@ -60,9 +61,9 @@ class EvaluationImportFormWidget(QWidget, WidgetLifecycleMixin):
     def _connect_internal_signals(self) -> None:
         self._setup_validators()
 
-        self._evaluation_title_input.textChanged.connect(self._validate_form)
-        self._maximum_grade_input.textChanged.connect(self._validate_form)
-        self._submit_button.clicked.connect(self._on_submit)
+        nuitka_helpers.safe_connect(signal=self._evaluation_title_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._maximum_grade_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._submit_button.clicked, slot=self._on_submit)
 
     def _setup_validators(self):
         evaluation_title_regex = QRegularExpression(r"^.{1,256}$")
@@ -135,7 +136,7 @@ class EvaluationsListWidget(PartialPlaceholderListWidget):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentRowChanged.connect(self._on_row_changed)
+        nuitka_helpers.safe_connect(signal=self.currentRowChanged, slot=self._on_row_changed)
 
     @Slot(int)
     def _on_row_changed(self, row: int) -> None:
@@ -179,7 +180,7 @@ class TemplateFileComboBox(PartialComboBox):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged, slot=self._on_index_changed)
 
     @Slot(ComboBoxPayload)
     @override
@@ -225,7 +226,7 @@ class SheetNameComboBox(PartialComboBox):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged, slot=self._on_index_changed)
 
     @Slot(int)
     @override
@@ -245,7 +246,7 @@ class RowKeywordComboBox(PartialComboBox):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged, slot=self._on_index_changed)
 
     @Slot(int)
     @override
@@ -265,7 +266,7 @@ class ColumnKeywordComboBox(PartialComboBox):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged, slot=self._on_index_changed)
 
     @Slot(int)
     @override

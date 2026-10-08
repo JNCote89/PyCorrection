@@ -3,6 +3,7 @@ from typing import override
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import QGroupBox
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_dtos import CourseSelectionWidgetDTO
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.labels import DefaultLabel
@@ -53,13 +54,14 @@ class CourseSelectionGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self._course_semester_combo_box.currentTextChanged.connect(
-            self._course_selection_combo_box_model.filter_course_by_semester)
+        nuitka_helpers.safe_connect(signal=self._course_semester_combo_box.currentTextChanged,
+                                    slot=self._course_selection_combo_box_model.filter_course_by_semester)
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._course_id_combo_box.courseIDChanged.connect(self.courseIDChanged)
-        self._course_semester_combo_box.semesterLabelChanged.connect(self.semesterLabelChanged)
+        nuitka_helpers.safe_connect(signal=self._course_id_combo_box.courseIDChanged, slot=self.courseIDChanged)
+        nuitka_helpers.safe_connect(signal=self._course_semester_combo_box.semesterLabelChanged,
+                                    slot=self.semesterLabelChanged)
 
     @Slot(CourseSelectionWidgetDTO)
     def set_courses(self, course_selection_widget_dtos: list[CourseSelectionWidgetDTO]) -> None:

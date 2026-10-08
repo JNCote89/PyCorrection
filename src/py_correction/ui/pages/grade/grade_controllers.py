@@ -48,7 +48,7 @@ class GradeManagementController(BaseController):
         nuitka_helpers.safe_connect(signal=self._event_bus.evaluation.dataChanged,
                                     slot=self._refresh_evaluation_id_combo_box)
         nuitka_helpers.safe_connect(signal=self._event_bus.course.geNoteImportCompleted,
-                                    slot=self.schedule_grade_sub_section_update)
+                                    slot=lambda _: self.schedule_grade_sub_section_update())
         nuitka_helpers.safe_connect(signal=self._event_bus.evaluation.templateConfigurationChanged,
                                     slot=self.schedule_grade_sub_section_update)
         nuitka_helpers.safe_connect(signal=self._event_bus.submission.correctionFileUpdated,

@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QGroupBox, QPushButton, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.labels import DefaultDynamicLabel, DefaultLabel
 from src.py_correction.ui.components.layouts import DefaultGridLayout
@@ -58,8 +59,9 @@ class ArchiveManagementGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._archive_button.clicked.connect(self.archiveButtonClicked)
-        self._restored_archive_import_widget.restoredArchivePathSubmitted.connect(self.restoredArchivePathSubmitted)
+        nuitka_helpers.safe_connect(signal=self._archive_button.clicked, slot=self.archiveButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._restored_archive_import_widget.restoredArchivePathSubmitted,
+                                    slot=self.restoredArchivePathSubmitted)
 
     def set_archive_label(self, label_text: ArchivePathLabelText) -> None:
         self._delete_archive_directory_label.setText(label_text.label_text)

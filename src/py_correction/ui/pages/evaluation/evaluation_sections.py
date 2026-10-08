@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.evaluation.evaluation_dtos import EvaluationCreateDTO
 from src.py_correction.core.domains.shared.shared_dtos import ComboBoxPayload, SelectionWidgetDTO
 from src.py_correction.core.domains.shared.shared_enums import AutofillOptions
@@ -43,7 +44,8 @@ class EvaluationFormImportCollapsibleSection(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_import_form_widget.evaluationFormSubmitted.connect(self.evaluationFormSubmitted)
+        nuitka_helpers.safe_connect(signal=self._evaluation_import_form_widget.evaluationFormSubmitted,
+                                    slot=self.evaluationFormSubmitted)
 
     def set_collapsible_section_state(self, expanded: bool) -> None:
         self.collapsible_section.set_expand_state(expanded=expanded)
@@ -69,8 +71,8 @@ class EvaluationTemplateImportGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_template_import_widget.evaluationTemplateFileSubmitted.connect(
-            self.evaluationTemplateFileSubmitted)
+        nuitka_helpers.safe_connect(signal=self._evaluation_template_import_widget.evaluationTemplateFileSubmitted,
+                                    slot=self.evaluationTemplateFileSubmitted)
 
     @Slot(Path)
     def update_template_import_starting_directory(self, starting_directory: Path) -> None:
@@ -153,13 +155,19 @@ class EvaluationManagementGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_list_widget.evaluationIDChanged.connect(self.evaluationIDChanged)
-        self._evaluation_list_widget.emptyListStatusChanged.connect(self.emptyListStatusChanged)
+        nuitka_helpers.safe_connect(signal=self._evaluation_list_widget.evaluationIDChanged,
+                                    slot=self.evaluationIDChanged)
+        nuitka_helpers.safe_connect(signal=self._evaluation_list_widget.emptyListStatusChanged,
+                                    slot=self.emptyListStatusChanged)
 
-        self._template_file_combo_box.templateFileSelectionChanged.connect(self.templateFileSelectionChanged)
-        self._sheet_name_combo_box.sheetNameSelectionChanged.connect(self.sheetNameSelectionChanged)
-        self._row_keyword_combo_box.rowKeywordSelectionChanged.connect(self.rowKeywordSelectionChanged)
-        self._column_keyword_combo_box.columnKeywordSelectionChanged.connect(self.columnKeywordSelectionChanged)
+        nuitka_helpers.safe_connect(signal=self._template_file_combo_box.templateFileSelectionChanged,
+                                    slot=self.templateFileSelectionChanged)
+        nuitka_helpers.safe_connect(signal=self._sheet_name_combo_box.sheetNameSelectionChanged,
+                                    slot=self.sheetNameSelectionChanged)
+        nuitka_helpers.safe_connect(signal=self._row_keyword_combo_box.rowKeywordSelectionChanged,
+                                    slot=self.rowKeywordSelectionChanged)
+        nuitka_helpers.safe_connect(signal=self._column_keyword_combo_box.columnKeywordSelectionChanged,
+                                    slot=self.columnKeywordSelectionChanged)
 
     @Slot(SelectionWidgetDTO)
     def update_evaluation_list(self, evaluations: list[SelectionWidgetDTO] | None) -> None:

@@ -5,6 +5,7 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QStyle, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 
 
@@ -25,7 +26,7 @@ class DefaultPathPickerWidget(QWidget, WidgetLifecycleMixin):
         folder_icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogOpenButton)  # type: ignore[arg-type]
 
         browse_action = QAction(folder_icon, "Navigation", self.path_directory_line_edit)
-        browse_action.triggered.connect(self._browse_directory)
+        nuitka_helpers.safe_connect(signal=browse_action.triggered, slot=self._browse_directory)
         self.path_directory_line_edit.addAction(browse_action, QLineEdit.ActionPosition.LeadingPosition)  # type: ignore[arg-type]
 
     @override

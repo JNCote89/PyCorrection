@@ -79,7 +79,7 @@ class ReferenceImportTextEdit(QPlainTextEdit, WidgetLifecycleMixin):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.textChanged.connect(self._handle_text_changed)
+        nuitka_helpers.safe_connect(signal=self.textChanged, slot=self._handle_text_changed)
 
     def get_references(self) -> list[str]:
         text = self.toPlainText()
@@ -331,7 +331,7 @@ class ReferenceTableView(PartialFixTableView):
         self._init_ui()
 
         self._create_delegates()
-        self.table_model.rowUpdated.connect(self._update_label_cells)
+        nuitka_helpers.safe_connect(signal=self.table_model.rowUpdated, slot=self._update_label_cells)
 
     def _create_delegates(self) -> None:
         delegates = {ReferenceTableDTO.Fields.VERIFICATION_STATUS: VerificationComboBoxDelegate(parent=self),
@@ -453,7 +453,7 @@ class CollapsibleDeleteReferences(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._delete_button.clicked.connect(self.referenceDeletedButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._delete_button.clicked, slot=self.referenceDeletedButtonClicked)
 
 
 class ReferenceTypeStackedBarChart(PartialFigure):

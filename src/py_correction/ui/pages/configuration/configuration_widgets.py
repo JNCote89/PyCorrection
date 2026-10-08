@@ -3,6 +3,7 @@ from typing import override
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.shared.shared_enums import AutofillOptions
 from src.py_correction.core.settings_manager import ThemeOptions
 from src.py_correction.engine.reference.csl.csl_enum import CitationStyle
@@ -20,7 +21,8 @@ class ThemeComboBox(PartialComboBox):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged,
+                                    slot=self._on_index_changed)
 
     @Slot(int)
     @override
@@ -40,7 +42,8 @@ class EvaluationAutofillComboBox(PartialComboBox):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged,
+                                    slot=self._on_index_changed)
 
     @Slot(int)
     @override
@@ -62,7 +65,8 @@ class CitationStyleComboBox(PartialComboBox):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged,
+                                    slot=self._on_index_changed)
 
     @Slot(int)
     @override

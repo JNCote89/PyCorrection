@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QPushButton, QScrollArea, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.reference.reference_figures_dtos import GradeReferencePlotDTO
 from src.py_correction.core.domains.shared.shared_dtos import ComboBoxPayload
 from src.py_correction.core.theme_manager import ThemeOptions
@@ -68,9 +69,11 @@ class GradeManagementGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_combo_box.evaluationIDChanged.connect(self.evaluationIDChanged)
-        self._moodle_correction_archive_button.clicked.connect(self.moodleArchiveButtonClicked)
-        self._genote_update_button.clicked.connect(self.genoteUpdateButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._evaluation_combo_box.evaluationIDChanged,
+                                    slot=self.evaluationIDChanged)
+        nuitka_helpers.safe_connect(signal=self._moodle_correction_archive_button.clicked,
+                                    slot=self.moodleArchiveButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._genote_update_button.clicked, slot=self.genoteUpdateButtonClicked)
 
     def populate_evaluation_id_combo_box(self, payload: ComboBoxPayload) -> None:
         self._evaluation_combo_box.populate_combo_box(payload=payload)
@@ -141,9 +144,9 @@ class GradeStatisticsGroupBox(QGroupBox, WidgetLifecycleMixin):
         main_layout.addWidget(self._export_excel_button)
 
     def _connect_downstream_signals(self) -> None:
-        self._launch_stats_button.clicked.connect(self.launchStatsClicked)
-        self._export_figures_button.clicked.connect(self.exportFiguresClicked)
-        self._export_excel_button.clicked.connect(self.exportExcelClicked)
+        nuitka_helpers.safe_connect(signal=self._launch_stats_button.clicked, slot=self.launchStatsClicked)
+        nuitka_helpers.safe_connect(signal=self._export_figures_button.clicked, slot=self.exportFiguresClicked)
+        nuitka_helpers.safe_connect(signal=self._export_excel_button.clicked, slot=self.exportExcelClicked)
 
     @Slot(str)
     def set_charts_theme(self, theme_name: ThemeOptions) -> None:

@@ -5,6 +5,7 @@ from PySide6.QtCore import (QAbstractTableModel, QModelIndex, QObject, QPersiste
 from PySide6.QtGui import QColor, QRegularExpressionValidator
 from PySide6.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_student_dtos import CourseStudentTableDTO, CourseStudentUpdateDTO
 from src.py_correction.core.domains.shared.shared_enums import ImportTypeEnum
 from src.py_correction.core.domains.student.student_dtos import StudentCreateDTO
@@ -61,11 +62,11 @@ class StudentImportFormWidget(QWidget, WidgetLifecycleMixin):
     def _connect_internal_signals(self) -> None:
         self._setup_validators()
 
-        self._cip_input.textChanged.connect(self._validate_form)
-        self._first_name_input.textChanged.connect(self._validate_form)
-        self._last_name_input.textChanged.connect(self._validate_form)
+        nuitka_helpers.safe_connect(signal=self._cip_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._first_name_input.textChanged, slot=lambda _: self._validate_form())
+        nuitka_helpers.safe_connect(signal=self._last_name_input.textChanged, slot=lambda _: self._validate_form())
 
-        self._submit_button.clicked.connect(self._on_submit)
+        nuitka_helpers.safe_connect(signal=self._submit_button.clicked, slot=self._on_submit)
 
     def _setup_validators(self) -> None:
         cip_regex = QRegularExpression(r"^[a-z]{4}\d{4}$")
@@ -219,7 +220,7 @@ class StudentTableView(PartialReactiveTableView):
     def _connect_internal_signals(self) -> None:
         # To change the color on the entire row when the user toggle the active/inactive status. By default, if you
         # click on the checkbox, it only selects the checkbox, even if the selection mode is set to SelectRows
-        self.clicked.connect(lambda index: self.selectRow(index.row()))
+        nuitka_helpers.safe_connect(signal=self.clicked, slot=lambda index: self.selectRow(index.row()))
 
     @override
     def _configure_table_sorting(self) -> None:

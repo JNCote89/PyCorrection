@@ -518,19 +518,19 @@ class FAQCollapsibleSection(QWidget, WidgetLifecycleMixin):
             Les principales bibliothèques utilisées sont PySide6 pour le GUI, SQLite pour la base
             de données, openpyxl pour gérer les gabarits de correction et la feuille GeNote, pypandoc 
             pour gérer les styles bibliographiques et l'importation de fichiers bibtext, 
-            ainsi que les API de CrossRef (habanero) et OpenAlex pour la vérification 
-            des références. L'application a été compilée avec Nuitka et est signée digitalement par la 
-            SignPath Foundation.
+            ainsi que les API de Crossref (habanero) et OpenAlex pour la vérification 
+            des références. L'application a été compilée avec Nuitka.
             """)
 
         self._engine_qa = FAQBlockText(
             block_question="""Est-ce que l'IA générative est utilisée pour évaluer les références?""",
             block_answer=f"""
             Aucune IA générative n'est utilisée pour vérifier les références. L'ensemble des vérifications sont issues 
-            d'un algorithme simple en Python. L'objectif est de garder l'application gratuite avec une faible empreinte 
-            environnementale. De plus, les IA génératives ne sont pas performantes pour évaluer le niveau de preuve.
-            La qualité des références est évaluée en fonction des métadonnées tirées de CrossRef
-            et OpenAlex. Ainsi, il demeure primordial que le jugement de l'enseignant s'applique pour faire l'évaluation
+            d'un algorithme simple en Python (évaluation de la distance de Levenshtein entre les métadonnées de Crossref 
+            et les références fournies par l'étudiant). L'objectif est de garder l'application gratuite avec une faible 
+            empreinte environnementale. De plus, les IA génératives ne sont pas performantes pour évaluer le niveau de 
+            preuve. La qualité des références est évaluée en fonction des métadonnées tirées de Crossref 
+            et OpenAlex. Ainsi, il demeure primordial que le jugement de l'enseignant s'applique pour faire l'évaluation 
             finale. 
             """)
 

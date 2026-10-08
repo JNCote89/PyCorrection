@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QSizePolicy, QSpinBox, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.shared.shared_dtos import ComboBoxPayload
 from src.py_correction.core.domains.shared.shared_enums import AutofillOptions
 from src.py_correction.core.settings_manager import ThemeOptions
@@ -99,12 +100,17 @@ class ConfigurationsGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._theme_combo_box.uiThemeChanged.connect(self.uiThemeChanged)
-        self._user_root_directory_picker.userRootDirectoryChanged.connect(self.userRootDirectoryChanged)
-        self._evaluation_autofill_combo_box.evaluationAutofillChanged.connect(self.evaluationAutofillChanged)
-        self._citation_style_combo_box.citationStyleChanged.connect(self.citationStyleChanged)
-        self._pop_up_notification_check_box.toggled.connect(self.popupNotificationChanged)
-        self._expand_manual_section_check_box.toggled.connect(self.manualSectionExpansionChanged)
+        nuitka_helpers.safe_connect(signal=self._theme_combo_box.uiThemeChanged, slot=self.uiThemeChanged)
+        nuitka_helpers.safe_connect(signal=self._user_root_directory_picker.userRootDirectoryChanged,
+                                    slot=self.userRootDirectoryChanged)
+        nuitka_helpers.safe_connect(signal=self._evaluation_autofill_combo_box.evaluationAutofillChanged,
+                                    slot=self.evaluationAutofillChanged)
+        nuitka_helpers.safe_connect(signal=self._citation_style_combo_box.citationStyleChanged,
+                                    slot=self.citationStyleChanged)
+        nuitka_helpers.safe_connect(signal=self._pop_up_notification_check_box.toggled,
+                                    slot=self.popupNotificationChanged)
+        nuitka_helpers.safe_connect(signal=self._expand_manual_section_check_box.toggled,
+                                    slot=self.manualSectionExpansionChanged)
 
     @Slot(ComboBoxPayload)
     def populate_theme_combo_box(self, payload: ComboBoxPayload) -> None:

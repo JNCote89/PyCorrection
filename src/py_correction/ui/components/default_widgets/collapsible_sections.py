@@ -3,6 +3,7 @@ from typing import override
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QGroupBox, QLabel, QLayout, QPushButton, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 
 
@@ -87,11 +88,13 @@ class DefaultCollapsibleSection(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.toggle_button.clicked.connect(self.set_expand_state)
+        # Because the QPushButton signature is overload with the setCheckable, must overload the signal to work inside
+        # the safe_connect
+        nuitka_helpers.safe_connect(signal=self.toggle_button.clicked, slot=self.set_expand_state,
+                                    overload=bool)
 
-    @Slot()
+    @Slot(bool)
     def set_expand_state(self, expanded: bool):
-
         if expanded:
             self.title_label.set_html_title(unicode_symbol="\u25BC", title=self._title, subtitle=self._subtitle)
         else:
@@ -150,9 +153,12 @@ class DefaultCollapsibleSubSection(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.toggle_button.clicked.connect(self.set_expand_state)
+        # Because the QPushButton signature is overload with the setCheckable, must overload the signal to work inside
+        # the safe_connect
+        nuitka_helpers.safe_connect(signal=self.toggle_button.clicked, slot=self.set_expand_state,
+                                    overload=bool)
 
-    @Slot()
+    @Slot(bool)
     def set_expand_state(self, expanded: bool):
         if expanded:
             self.title_label.set_html_title(unicode_symbol="\u25BC", title=self._title, subtitle=self._subtitle)

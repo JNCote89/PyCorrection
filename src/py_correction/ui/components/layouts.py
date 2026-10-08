@@ -1,6 +1,7 @@
 from PySide6.QtCore import QModelIndex, Qt
 from PySide6.QtWidgets import QFormLayout, QGridLayout, QTableView, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.default_widgets.scroll_area import DefaultScrollArea
 
 
@@ -46,8 +47,8 @@ class DefaultPageVerticalScrollLayout(QWidget):
                 nested_tables.append(top_widget)
 
             for table in nested_tables:
-                table.selectionModel().currentChanged.connect(
-                    lambda current, prev, t=table: self._sync_scroll_area(t, current))
+                nuitka_helpers.safe_connect(signal=table.selectionModel().currentChanged,
+                    slot=lambda current, prev, t=table: self._sync_scroll_area(t, current))
 
     def _sync_scroll_area(self, table: QTableView, current_index: QModelIndex) -> None:
         if not current_index.isValid():

@@ -42,9 +42,9 @@ class ArchiveManagementController(BaseController):
     @override
     def _connect_upstream_signals(self) -> None:
         nuitka_helpers.safe_connect(signal=self._event_bus.settings.userRootDirectoryChanged,
-                                    slot=self._refresh_archive_label)
+                                    slot=lambda _: self._refresh_archive_label())
         nuitka_helpers.safe_connect(signal=self._event_bus.course.geNoteImportCompleted,
-                                    slot=self._refresh_archive_label)
+                                    slot=lambda _: self._refresh_archive_label())
 
     @override
     def _connect_downstream_signals(self) -> None:

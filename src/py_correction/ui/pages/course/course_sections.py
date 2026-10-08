@@ -4,6 +4,7 @@ from typing import override
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_dtos import CourseCreateDTO, CourseTableDTO
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.collapsible_sections import DefaultCollapsibleSection
@@ -32,8 +33,9 @@ class GeNoteImportGroupbox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._genote_import_widget.geNoteGradeFilePathSubmitted.connect(self.geNoteGradeFilePathSubmitted)
-        self._genote_import_widget.geNoteImportFailed.connect(self.geNoteImportFailed)
+        nuitka_helpers.safe_connect(signal=self._genote_import_widget.geNoteGradeFilePathSubmitted,
+                                    slot=self.geNoteGradeFilePathSubmitted)
+        nuitka_helpers.safe_connect(signal=self._genote_import_widget.geNoteImportFailed, slot=self.geNoteImportFailed)
 
     @Slot(Path)
     def update_starting_directory(self, starting_directory: Path) -> None:
@@ -65,7 +67,8 @@ class CourseImportFormCollapsibleSection(QWidget, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._course_import_form_widget.courseFormSubmitted.connect(self.courseFormSubmitted)
+        nuitka_helpers.safe_connect(signal=self._course_import_form_widget.courseFormSubmitted,
+                                    slot=self.courseFormSubmitted)
 
     def set_collapsible_section_state(self, expanded: bool):
         self.collapsible_section.set_expand_state(expanded=expanded)

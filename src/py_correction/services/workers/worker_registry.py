@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from src.py_correction.core import nuitka_helpers
+
 if TYPE_CHECKING:
     from PySide6.QtCore import QThread
 
@@ -10,7 +12,7 @@ class WorkerRegistry:
 
     def register(self, name: str, worker: "QThread"):
         self._active_workers[name] = worker
-        worker.finished.connect(lambda: self.unregister(name))
+        nuitka_helpers.safe_connect(signal=worker.finished, slot=lambda: self.unregister(name))
 
     def unregister(self, name: str):
         self._active_workers.pop(name, None)

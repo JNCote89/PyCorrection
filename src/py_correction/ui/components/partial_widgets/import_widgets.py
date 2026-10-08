@@ -5,6 +5,7 @@ from PySide6.QtCore import QStandardPaths, Qt, Slot
 from PySide6.QtGui import QDragEnterEvent, QDragLeaveEvent, QDropEvent
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.message_boxes import DefaultQuestionMessageBox
 from src.py_correction.ui.feedbacks.messages.confirmation_messages import BatchFileImportVerificationMessage
@@ -35,7 +36,7 @@ class PartialDragAndDropWidget(QWidget, WidgetLifecycleMixin):
 
         self.drag_browse_button = QPushButton("Sélectionner à partir du navigateur")
         self.drag_browse_button.setObjectName("DragBrowseButton")
-        self.drag_browse_button.clicked.connect(self._open_file_dialog_from_button)
+        nuitka_helpers.safe_connect(signal=self.drag_browse_button.clicked, slot=self._open_file_dialog_from_button)
 
         self.drag_label = QLabel(self._label)
         self.drag_label.setAlignment(Qt.AlignmentFlag.AlignCenter) # type: ignore[arg-type]

@@ -74,8 +74,9 @@ class CorrectionManagementGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._evaluation_combo_box.evaluationIDChanged.connect(self.evaluationIDChanged)
-        self._student_combo_box.studentIDChanged.connect(self.studentIDChanged)
+        nuitka_helpers.safe_connect(signal=self._evaluation_combo_box.evaluationIDChanged,
+                                    slot=self.evaluationIDChanged)
+        nuitka_helpers.safe_connect(signal=self._student_combo_box.studentIDChanged, slot=self.studentIDChanged)
 
     @Slot(ComboBoxPayload)
     def populate_evaluation_id_combo_box(self, payload: ComboBoxPayload) -> None:
@@ -143,13 +144,15 @@ class ReferenceImportGroupBox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._bib_text_import_widget.bibTextFilePathSubmitted.connect(self.bibTextFilePathSubmitted)
+        nuitka_helpers.safe_connect(signal=self._bib_text_import_widget.bibTextFilePathSubmitted,
+                                    slot=self.bibTextFilePathSubmitted)
         nuitka_helpers.safe_connect(signal=self._submit_references_button.clicked,
                                     slot=self._on_references_submit)
 
     @override
     def _connect_internal_signals(self) -> None:
-        self._reference_verification_text.textChanged.connect(self._refresh_submit_button_state)
+        nuitka_helpers.safe_connect(signal=self._reference_verification_text.textChanged,
+                                    slot=self._refresh_submit_button_state)
 
     def import_bib_text_inside_edit_line(self, text: str) -> None:
         self._reference_verification_text.setPlainText(text)
@@ -260,12 +263,15 @@ class ReferenceTableViewGroupbox(QGroupBox, WidgetLifecycleMixin):
 
     @override
     def _connect_downstream_signals(self) -> None:
-        self._reference_table_model.referenceUpdated.connect(self.referenceUpdated)
-        self._delete_collapsible_section.referenceDeletedButtonClicked.connect(self.referenceDeletedButtonClicked)
-        self._automatic_verification_button.clicked.connect(self.automaticVerificationButtonClicked)
-        self._abort_verification_button.clicked.connect(self.abortVerificationClicked)
-        self._excel_export_button.clicked.connect(self.excelExportClicked)
-        self._batch_relevance_evaluation_button.clicked.connect(self.batchRelevanceRelevantClicked)
+        nuitka_helpers.safe_connect(signal=self._reference_table_model.referenceUpdated, slot=self.referenceUpdated)
+        nuitka_helpers.safe_connect(signal=self._delete_collapsible_section.referenceDeletedButtonClicked,
+                                    slot=self.referenceDeletedButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._automatic_verification_button.clicked,
+                                    slot=self.automaticVerificationButtonClicked)
+        nuitka_helpers.safe_connect(signal=self._abort_verification_button.clicked, slot=self.abortVerificationClicked)
+        nuitka_helpers.safe_connect(signal=self._excel_export_button.clicked, slot=self.excelExportClicked)
+        nuitka_helpers.safe_connect(signal=self._batch_relevance_evaluation_button.clicked,
+                                    slot=self.batchRelevanceRelevantClicked)
 
     @Slot(ReferenceTableDTO)
     def set_references(self, references: list[ReferenceTableDTO] | None) -> None:
@@ -304,7 +310,8 @@ class ReferenceTableViewGroupbox(QGroupBox, WidgetLifecycleMixin):
             self._delay_timer.timeout.disconnect()
             self._timer_is_connected = False
 
-        self._delay_timer.timeout.connect(partial(self._show_progress_bar, maximum_range))
+        nuitka_helpers.safe_connect(signal=self._delay_timer.timeout,
+                                    slot=partial(self._show_progress_bar, maximum_range))
         self._delay_timer.start()
         self._timer_is_connected = True
 
@@ -366,8 +373,8 @@ class ReferenceStatisticsGroupBox(QGroupBox, WidgetLifecycleMixin):
         main_layout.addWidget(self._export_figures_button)
 
     def _connect_downstream_signals(self) -> None:
-        self._launch_stats_button.clicked.connect(self.launchStatsClicked)
-        self._export_figures_button.clicked.connect(self.exportFiguresClicked)
+        nuitka_helpers.safe_connect(signal=self._launch_stats_button.clicked, slot=self.launchStatsClicked)
+        nuitka_helpers.safe_connect(signal=self._export_figures_button.clicked, slot=self.exportFiguresClicked)
 
     @Slot(str)
     def set_charts_theme(self, theme_name: ThemeOptions) -> None:

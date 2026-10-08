@@ -5,6 +5,7 @@ from PySide6.QtCore import QModelIndex, QSignalBlocker, QSortFilterProxyModel, Q
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import QComboBox, QWidget
 
+from src.py_correction.core import nuitka_helpers
 from src.py_correction.core.domains.course.course_dtos import CourseSelectionWidgetDTO
 from src.py_correction.ui.components.base_components.widget_lifecycle_mixin import WidgetLifecycleMixin
 from src.py_correction.ui.components.default_widgets.delegates.item_delegates import DefaultWordWrapDelegate
@@ -109,7 +110,8 @@ class CourseSemesterComboBox(QComboBox, WidgetLifecycleMixin):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentTextChanged.connect(self._on_text_changed)
+        nuitka_helpers.safe_connect(signal=self.currentTextChanged,
+                                    slot=self._on_text_changed)
 
     def synchronized_semester_label(self, semester_label: str | None):
         self._match_current_data_selection_index(current_data_selection=semester_label)
@@ -145,7 +147,8 @@ class CourseIDComboBox(PartialComboBox):
 
     @override
     def _connect_internal_signals(self) -> None:
-        self.currentIndexChanged.connect(self._on_index_changed)
+        nuitka_helpers.safe_connect(signal=self.currentIndexChanged,
+                                    slot=self._on_index_changed)
 
     def update_placeholder(self, has_data: bool) -> None:
         text = "" if has_data else ("Aucun cours dans la base de données. Il faut créer un cours dans l'onglet "
