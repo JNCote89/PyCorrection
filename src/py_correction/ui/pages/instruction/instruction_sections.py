@@ -515,9 +515,9 @@ class FAQCollapsibleSection(QWidget, WidgetLifecycleMixin):
             block_question="""Quel est le stack utilisé pour l'application?""",
             block_answer=f"""
             L'ensemble du code Python est disponible sur mon GitHub <a {HREF_STYLE} href='{github_url}'>{github_url}</a> . 
-            Les principales bibliothèques utilisées sont PySide6 pour le GUI, SQLite pour la base
+            Les principales bibliothèques utilisées sont PySide6 pour le GUI, SQLAlchemy pour la base
             de données, openpyxl pour gérer les gabarits de correction et la feuille GeNote, pypandoc 
-            pour gérer les styles bibliographiques et l'importation de fichiers bibtext, 
+            pour gérer les styles bibliographiques et l'importation de fichiers bibtext, matplotlib pour les graphiques, 
             ainsi que les API de Crossref (habanero) et OpenAlex pour la vérification 
             des références. L'application a été compilée avec Nuitka.
             """)
